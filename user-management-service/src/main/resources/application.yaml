@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: user-management-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/emp-user-management-db
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    user: root
+    password: root
+    url: jdbc:mysql://localhost:3306/emp-user-management-db
+    locations: classpath:db/migration
+
+server:
+  port: 8090
+
+jwt:
+  secret: temporary-jwt-secret
