@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
   private static final String NO_USERS_COULD_BE_FOUND = "No users could be found";
   private static final String PROVIDED_USERNAME_CANNOT_BE_USED = "Provided username cannot be used";
-  private static final String CANNOT_UPDATE_USER_DATA = "Cannot update user data";
   public static final String NO_USER_COULD_BE_FOUND_FOR_ID = "No user could be found for id {{}}";
   public static final String THE_PROVIDED_USERNAME_WAS_NOT_UNIQUE =
       "The provided username was not unique: {{}}";
@@ -51,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserInfoResponseDto save(UserSaveRequestDto userSaveRequestDto) {
-    validateUsername(userSaveRequestDto.getUsername());
+    checkIfUsernameUnique(userSaveRequestDto.getUsername());
 
     UserEntity userEntity = UserMapper.toUserEntity(userSaveRequestDto);
 
@@ -60,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserInfoResponseDto updateUserById(Long id, UserSaveRequestDto userSaveRequestDto) {
-    validateUsername(userSaveRequestDto.getUsername());
+    checkIfUsernameUnique(userSaveRequestDto.getUsername(), id);
     UserEntity existingUserEntity = getUserEntityById(id);
 
     UserEntity userEntityToUpdate = UserMapper.toUserEntity(userSaveRequestDto);
@@ -81,19 +79,24 @@ public class UserServiceImpl implements UserService {
 
     if (optionalUserEntity.isEmpty()) {
       log.error(NO_USER_COULD_BE_FOUND_FOR_ID, id);
-      throw new UserBadRequestException(CANNOT_UPDATE_USER_DATA);
+      throw new UserBadRequestException(NO_USERS_COULD_BE_FOUND);
     }
 
     return optionalUserEntity.get();
   }
 
-  private void validateUsername(String username) {
-    if (StringUtils.isBlank(username)) {
-      log.error(PROVIDED_USERNAME_CANNOT_BE_USED);
+  private void checkIfUsernameUnique(String username) {
+    Optional<UserEntity> userEntity = userRepository.findByUsername(username);
+
+    if (userEntity.isPresent()) {
+      log.error(THE_PROVIDED_USERNAME_WAS_NOT_UNIQUE, username);
       throw new UserBadRequestException(PROVIDED_USERNAME_CANNOT_BE_USED);
     }
+  }
 
-    Optional<UserEntity> userEntity = userRepository.findByUsername(username);
+  private void checkIfUsernameUnique(String username, Long existingId) {
+    Optional<UserEntity> userEntity = userRepository.findByUsernameAndIdNot(username, existingId);
+
     if (userEntity.isPresent()) {
       log.error(THE_PROVIDED_USERNAME_WAS_NOT_UNIQUE, username);
       throw new UserBadRequestException(PROVIDED_USERNAME_CANNOT_BE_USED);

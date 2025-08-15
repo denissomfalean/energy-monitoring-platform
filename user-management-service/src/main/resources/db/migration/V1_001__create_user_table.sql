@@ -1,7 +1,7 @@
-create table if not exists users
+CREATE TABLE IF NOT EXISTS users
 (
-    id          bigint PRIMARY KEY,
-    username    varchar(255),
-    password    varchar(255),
-    access_role varchar(255)
+    id          BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username    VARCHAR(255) NOT NULL UNIQUE,
+    password    VARCHAR(255) NOT NULL,
+    access_role VARCHAR(255) NOT NULL
 );

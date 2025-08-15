@@ -22,7 +22,7 @@ public class UserMapper {
     return UserEntity.builder()
         .username(userSaveRequestDto.getUsername())
         .password(userSaveRequestDto.getPassword())
-        .accessRole(AccessRole.fromDto(userSaveRequestDto.getRole()))
+        .accessRole(AccessRole.fromDto(userSaveRequestDto.getAccessRole()))
         .build();
   }
 }

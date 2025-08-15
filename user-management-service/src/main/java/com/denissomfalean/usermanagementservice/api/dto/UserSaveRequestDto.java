@@ -10,5 +10,5 @@ import lombok.*;
 public class UserSaveRequestDto {
   private String username;
   private String password;
-  private AccessRoleDto role;
+  private AccessRoleDto accessRole;
 }

@@ -17,11 +17,11 @@ public interface UserApi {
   ResponseEntity<UserInfoResponseDto> getUserById(@PathVariable("id") Long id);
 
   @PostMapping(USER_MANAGEMENT_API_URL)
-  ResponseEntity<UserInfoResponseDto> save(UserSaveRequestDto userSaveRequestDto);
+  ResponseEntity<UserInfoResponseDto> save(@RequestBody UserSaveRequestDto userSaveRequestDto);
 
   @PutMapping(USER_MANAGEMENT_API_URL + "/{id}")
   ResponseEntity<UserInfoResponseDto> updateUserById(
-      @PathVariable("id") Long id, UserSaveRequestDto userSaveRequestDto);
+      @PathVariable("id") Long id, @RequestBody UserSaveRequestDto userSaveRequestDto);
 
   @DeleteMapping(USER_MANAGEMENT_API_URL + "/{id}")
   ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id);
