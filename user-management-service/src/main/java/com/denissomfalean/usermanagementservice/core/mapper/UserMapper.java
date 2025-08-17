@@ -1,9 +1,11 @@
 package com.denissomfalean.usermanagementservice.core.mapper;
 
 import com.denissomfalean.usermanagementservice.api.dto.UserInfoResponseDto;
+import com.denissomfalean.usermanagementservice.api.dto.UserLoginResponseDto;
 import com.denissomfalean.usermanagementservice.api.dto.UserSaveRequestDto;
 import com.denissomfalean.usermanagementservice.core.persistence.entity.AccessRole;
 import com.denissomfalean.usermanagementservice.core.persistence.entity.UserEntity;
+import com.denissomfalean.usermanagementservice.core.security.AuthenticatedUser;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -13,7 +15,6 @@ public class UserMapper {
     return UserInfoResponseDto.builder()
         .id(userEntity.getId())
         .username(userEntity.getUsername())
-        .password(userEntity.getPassword())
         .role(userEntity.getAccessRole().getDto())
         .build();
   }
@@ -23,6 +24,15 @@ public class UserMapper {
         .username(userSaveRequestDto.getUsername())
         .password(userSaveRequestDto.getPassword())
         .accessRole(AccessRole.fromDto(userSaveRequestDto.getAccessRole()))
+        .build();
+  }
+
+  public static UserLoginResponseDto toUserLoginResponseDto(
+      AuthenticatedUser authenticatedUser, String jwt) {
+
+    return UserLoginResponseDto.builder()
+        .userInfo(toUserInfoResponseDto(authenticatedUser.getUser()))
+        .jwt(jwt)
         .build();
   }
 }

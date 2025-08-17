@@ -24,4 +24,13 @@ public enum AccessRole {
     }
     throw new AccessRoleException(String.format(COULD_NOT_IDENTIFY_ROLE, dto.name()));
   }
+
+  public static AccessRole fromString(String role) {
+    for (AccessRole accessRole : values()) {
+      if (accessRole.name().equalsIgnoreCase(role)) {
+        return accessRole;
+      }
+    }
+    throw new AccessRoleException(String.format(COULD_NOT_IDENTIFY_ROLE, role));
+  }
 }
