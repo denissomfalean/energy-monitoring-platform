@@ -29,7 +29,7 @@ public interface UserApi {
   ResponseEntity<UserInfoResponseDto> save(@RequestBody UserSaveRequestDto userSaveRequestDto);
 
   @PutMapping(USER_MANAGEMENT_API_URL + "/{id}")
-  @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
+  @PreAuthorize("hasAnyAuthority('ADMIN')")
   ResponseEntity<UserInfoResponseDto> updateUserById(
       @PathVariable("id") Long id, @RequestBody UserSaveRequestDto userSaveRequestDto);
 

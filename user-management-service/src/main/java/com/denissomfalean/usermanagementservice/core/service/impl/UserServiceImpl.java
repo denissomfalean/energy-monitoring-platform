@@ -84,7 +84,6 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserInfoResponseDto updateUserById(Long id, UserSaveRequestDto userSaveRequestDto) {
-    checkUserIdAccessRights(id);
     checkIfUsernameUnique(userSaveRequestDto.getUsername(), id);
     UserEntity existingUserEntity = getUserEntityById(id);
 
